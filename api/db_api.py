@@ -1,5 +1,5 @@
 from flask import request
-from models.game_matches_new import GameMatchesNew
+from models.game_matches import GameMatches
 from utils import try_parse_int
 from datetime import datetime
 from app import app
@@ -19,7 +19,7 @@ def add_statistic():
     timeend = datetime.strptime(f"{request.form.get('datestart')} {request.form.get('timeend')}", "%Y.%m.%d %H:%M:%S") if request.form.get('timeend') else None
     timestart = datetime.strptime(f"{request.form.get('datestart')} {request.form.get('timestart')}", "%Y.%m.%d %H:%M:%S") if request.form.get('timestart') else None
 
-    id = GameMatchesNew.create(datestart=datestart,
+    id = GameMatches.create(datestart=datestart,
                                durationmatch=durationmatch,
                                game=game,
                                idlocation=idlocation,

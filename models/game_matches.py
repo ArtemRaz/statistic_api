@@ -2,8 +2,8 @@ from db import *
 
 
 class GameMatches(BaseModel):
-    datestart = CharField(null=True)
-    durationmatch = CharField(null=True)
+    datestart = DateField(null=True)
+    durationmatch = TimeField(null=True)
     game = CharField(null=True)
     idlocation = IntegerField(null=True)
     idsession = IntegerField(null=True)
@@ -11,8 +11,9 @@ class GameMatches(BaseModel):
     playedmaps = CharField(null=True)
     players = IntegerField(null=True)
     submodes = CharField(null=True)
-    timeend = CharField(null=True)
-    timestart = CharField(null=True)
+    timestart = DateTimeField(null=True)
+    timeend = DateTimeField(null=True)
+
 
     class Meta:
         table_name = 'game_matches'
