@@ -1,36 +1,38 @@
-from flask import request
+from flask import request, jsonify
 from models.game_matches import GameMatches
 from utils import try_parse_int
 from datetime import datetime
 from app import app
 
 
-@app.route("/add_statistic", methods=["POST"])
-def add_statistic():
-    datestart = datetime.strptime(request.form.get('datestart'), "%Y.%m.%d").date() if request.form.get('datestart') else None
-    durationmatch = datetime.strptime(request.form.get('durationmatch'), "%M:%S").time() if request.form.get('durationmatch') else None
-    game = request.form.get('game')
-    idlocation = try_parse_int(request.form.get('idlocation'))
-    idsession = try_parse_int(request.form.get('idsession'))
-    modes = request.form.get('modes')
-    playedmaps = request.form.get('playedmaps')
-    players = try_parse_int(request.form.get('players'))
-    submodes = request.form.get('submodes')
-    timeend = datetime.strptime(f"{request.form.get('datestart')} {request.form.get('timeend')}", "%Y.%m.%d %H:%M:%S") if request.form.get('timeend') else None
-    timestart = datetime.strptime(f"{request.form.get('datestart')} {request.form.get('timestart')}", "%Y.%m.%d %H:%M:%S") if request.form.get('timestart') else None
+@app.route("/add_game_match", methods=["POST"])
+def add_game_match():
+    req_json = request.get_json()
+    datestart = datetime.strptime(req_json.get('datestart'), "%Y.%m.%d").date() if req_json.get('datestart') else None
+    durationmatch = datetime.strptime(req_json.get('durationmatch'), "%M:%S").time() if req_json.get(
+        'durationmatch') else None
+    game = req_json.get('game')
+    idlocation = try_parse_int(req_json.get('idlocation'))
+    idsession = try_parse_int(req_json.get('idsession'))
+    modes = req_json.get('modes')
+    playedmaps = req_json.get('playedmaps')
+    players = try_parse_int(req_json.get('players'))
+    submodes = req_json.get('submodes')
+    timeend = datetime.strptime(f"{req_json.get('datestart')} {req_json.get('timeend')}",
+                                "%Y.%m.%d %H:%M:%S") if req_json.get('timeend') else None
+    timestart = datetime.strptime(f"{req_json.get('datestart')} {req_json.get('timestart')}",
+                                  "%Y.%m.%d %H:%M:%S") if req_json.get('timestart') else None
 
-    id = GameMatches.create(datestart=datestart,
-                               durationmatch=durationmatch,
-                               game=game,
-                               idlocation=idlocation,
-                               idsession=idsession,
-                               modes=modes,
-                               playedmaps=playedmaps,
-                               players=players,
-                               submodes=submodes,
-                               timeend=timeend,
-                               timestart=timestart)
+    new_record = GameMatches.create(datestart=datestart,
+                                    durationmatch=durationmatch,
+                                    game=game,
+                                    idlocation=idlocation,
+                                    idsession=idsession,
+                                    modes=modes,
+                                    playedmaps=playedmaps,
+                                    players=players,
+                                    submodes=submodes,
+                                    timeend=timeend,
+                                    timestart=timestart)
 
-    return {'id': id.id}, 200
-
-
+    return jsonify(id=new_record.id)
