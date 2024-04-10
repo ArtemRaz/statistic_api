@@ -14,6 +14,5 @@ class GameMatches(BaseModel):
     timestart = DateTimeField(null=True)
     timeend = DateTimeField(null=True)
 
-
     class Meta:
         table_name = 'game_matches'
