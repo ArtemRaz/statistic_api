@@ -1,6 +1,6 @@
 from flask import request, jsonify
 from models.game_matches import GameMatches
-from utils import try_parse_int
+from utils import try_parse_int, try_parse_datetime
 from datetime import datetime
 from app import app
 
@@ -8,9 +8,8 @@ from app import app
 @app.route("/add_game_match", methods=["POST"])
 def add_game_match():
     req_json = request.get_json()
-    datestart = datetime.strptime(req_json.get('datestart'), "%Y.%m.%d").date() if req_json.get('datestart') else None
-    durationmatch = datetime.strptime(req_json.get('durationmatch'), "%M:%S").time() if req_json.get(
-        'durationmatch') else None
+    datestart = try_parse_datetime(req_json.get('datestart'), "%Y.%m.%d").date()
+    durationmatch = try_parse_datetime(req_json.get('durationmatch'), "%M:%S").time()
     game = req_json.get('game')
     idlocation = try_parse_int(req_json.get('idlocation'))
     idsession = try_parse_int(req_json.get('idsession'))
@@ -18,10 +17,8 @@ def add_game_match():
     playedmaps = req_json.get('playedmaps')
     players = try_parse_int(req_json.get('players'))
     submodes = req_json.get('submodes')
-    timeend = datetime.strptime(f"{req_json.get('datestart')} {req_json.get('timeend')}",
-                                "%Y.%m.%d %H:%M:%S") if req_json.get('timeend') else None
-    timestart = datetime.strptime(f"{req_json.get('datestart')} {req_json.get('timestart')}",
-                                  "%Y.%m.%d %H:%M:%S") if req_json.get('timestart') else None
+    timeend = try_parse_datetime(f"{req_json.get('datestart')} {req_json.get('timeend')}", "%Y.%m.%d %H:%M:%S")
+    timestart = try_parse_datetime(f"{req_json.get('datestart')} {req_json.get('timestart')}", "%Y.%m.%d %H:%M:%S")
 
     new_record = GameMatches.create(datestart=datestart,
                                     durationmatch=durationmatch,
