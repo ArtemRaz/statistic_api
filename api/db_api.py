@@ -66,7 +66,7 @@ def add_weapon_statistic():
 
 
 @app.route("/add_skin_statistic", methods=["POST"])
-def add_weapon_statistic():
+def add_skin_statistic():
     req_json = request.get_json()
 
     game_match = req_json.get('game_match')
