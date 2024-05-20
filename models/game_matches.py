@@ -13,6 +13,7 @@ class GameMatches(BaseModel):
     submodes = CharField(null=True)
     timestart = DateTimeField(null=True)
     timeend = DateTimeField(null=True)
+    game_version = CharField(null=True)
 
     class Meta:
         table_name = 'game_matches'

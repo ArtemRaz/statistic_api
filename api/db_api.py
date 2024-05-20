@@ -18,7 +18,7 @@ def add_game_match():
     submodes = req_json.get('submodes')
     timeend = try_parse_datetime(f"{req_json.get('datestart')} {req_json.get('timeend')}", "%Y.%m.%d %H:%M:%S")
     timestart = try_parse_datetime(f"{req_json.get('datestart')} {req_json.get('timestart')}", "%Y.%m.%d %H:%M:%S")
-
+    game_version = req_json.get('game_version')
     new_record = GameMatches.create(
         datestart=datestart,
         durationmatch=durationmatch,
@@ -30,7 +30,8 @@ def add_game_match():
         players=players,
         submodes=submodes,
         timeend=timeend,
-        timestart=timestart
+        timestart=timestart,
+        game_version=game_version
     )
 
     return jsonify(id=new_record.id)
