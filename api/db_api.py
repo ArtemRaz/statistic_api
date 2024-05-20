@@ -1,7 +1,17 @@
+import zlib
+
 from flask import request, jsonify
 from models import GameMatches, WeaponStatistic, SkinStatistic
-from utils import try_parse_int, try_parse_datetime
+from utils import try_parse_int, try_parse_datetime, decode_to_files
 from app import app
+
+
+@app.route("/crush_report", methods=["POST", "GET"])
+def crush_report():
+    r = request
+    data = zlib.decompress(r.data)
+    decode_to_files(data)
+    return ""
 
 
 @app.route("/add_game_match", methods=["POST"])
