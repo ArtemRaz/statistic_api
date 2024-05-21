@@ -6,7 +6,7 @@ from utils import try_parse_int, try_parse_datetime, decode_to_files
 from app import app
 
 
-@app.route("/crush_report", methods=["POST", "GET"])
+@app.route("/crash_report", methods=["POST", "GET"])
 def crush_report():
     r = request
     data = zlib.decompress(r.data)
