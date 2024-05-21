@@ -20,7 +20,7 @@ def decode_to_files(data):
 
     cursor_pos = 3  # ignore CR1 (see comment)
     file_index = 0
-
+    log_name = str(uuid4())
     while cursor_pos < len(data):
         file_length = decode_file_length(data[cursor_pos:cursor_pos + 4])
         cursor_pos += 4
@@ -28,7 +28,10 @@ def decode_to_files(data):
             file_index += 1
             continue
         if file_index == 5:
-            with open(f"files/{uuid4()}.xml", "wb") as file:
+            with open(f"files/{log_name}.xml", "wb") as file:
+                file.write(data[cursor_pos:cursor_pos + file_length])
+        if file_index == 7:
+            with open(f"files/{log_name}.log", "wb") as file:
                 file.write(data[cursor_pos:cursor_pos + file_length])
         file_index += 1
         if file_index > 30:
