@@ -1,5 +1,6 @@
 from datetime import datetime
-from uuid import uuid4
+from uuid import UUID
+from models import WeaponStatistic, SkinStatistic
 
 
 def try_parse_int(val):
@@ -12,32 +13,31 @@ def try_parse_datetime(val, date_format):
         return datetime.strptime(val, date_format)
 
 
-def decode_to_files(data):
-    # // The 'CR1' marker prevents the data router backend to fallback to a backward compatibility version where
-    # // a buggy/incomplete header was written at the beginning of the stream and the correct/valid one at the end.
-    # uint8 Version[] = {'C', 'R', '1'};
-    # Engine\UE5\Source\Runtime\CrashReportCore\Private\CrashUpload.cpp:77
+def create_weapon(game_match, weapon):
+    weapon_uuid = weapon.get('weapon')
+    kills = weapon.get('kills')
+    headshots = weapon.get('headshots')
+    shots = weapon.get('shots')
+    reloads = weapon.get('reloads')
+    usage_time = try_parse_datetime(weapon.get('usage_time'), "%M:%S")
 
-    cursor_pos = 3  # ignore CR1 (see comment)
-    file_index = 0
-    log_name = str(uuid4())
-    while cursor_pos < len(data):
-        file_length = decode_file_length(data[cursor_pos:cursor_pos + 4])
-        cursor_pos += 4
-        if file_index == 2:
-            file_index += 1
-            continue
-        if file_index == 5:
-            with open(f"files/{log_name}.xml", "wb") as file:
-                file.write(data[cursor_pos:cursor_pos + file_length])
-        if file_index == 7:
-            with open(f"files/{log_name}.log", "wb") as file:
-                file.write(data[cursor_pos:cursor_pos + file_length])
-        file_index += 1
-        if file_index > 30:
-            break
-        cursor_pos += file_length
+    WeaponStatistic.create(
+        game_match=game_match,
+        weapon=weapon_uuid,
+        kills=kills,
+        headshots=headshots,
+        shots=shots,
+        reloads=reloads,
+        usage_time=usage_time
+    )
 
 
-def decode_file_length(data):
-    return int.from_bytes(data, 'little')
+def create_skin(game_match, skin):
+    skin_uuid = skin.get('skin')
+    usage_time = try_parse_datetime(skin.get('usage_time'), "%M:%S")
+
+    SkinStatistic.create(
+        game_match=game_match,
+        skin=skin_uuid,
+        usage_time=usage_time
+    )
