@@ -59,7 +59,7 @@ def add_game_match():
     except DataError as e:
         print(e)
         send_to_tg_channel(f"Failed to write: {req_json}")
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"error": str(e)}), 500
     except Exception as e:
         print(e)
         send_to_tg_channel(f"Unexpected error: {e}")
