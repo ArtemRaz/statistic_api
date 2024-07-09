@@ -1,6 +1,5 @@
 from flask import request, jsonify
 from peewee import DataError
-from db import database
 from models import GameMatches
 from utils import try_parse_datetime, create_weapon, create_skin, send_to_tg_channel
 from app import app
@@ -25,7 +24,7 @@ def add_game_match():
     weapons = req_json.get('weapons')
     skins = req_json.get('skins')
 
-
+    return_code = 200
     try:
         new_record = GameMatches.create(
             datestart=datestart,
@@ -48,6 +47,7 @@ def add_game_match():
                 except DataError as e:
                     print(e)
                     send_to_tg_channel(f"Failed to write: {weapon}")
+                    return_code = 400
         if skins:
             for skin in skins:
                 try:
@@ -55,9 +55,14 @@ def add_game_match():
                 except DataError as e:
                     print(e)
                     send_to_tg_channel(f"Failed to write: {skin}")
+                    return_code = 400
     except DataError as e:
         print(e)
         send_to_tg_channel(f"Failed to write: {req_json}")
-        return jsonify({"error": str(e)})
+        return jsonify({"error": str(e)}), 400
+    except Exception as e:
+        print(e)
+        send_to_tg_channel(f"Unexpected error: {e}")
+        return jsonify({"error": str(e)}), 500
 
-    return jsonify(id=new_record.id), 200
+    return jsonify(id=new_record.id), return_code
