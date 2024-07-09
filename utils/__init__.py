@@ -1,6 +1,9 @@
+import uuid
+
+import requests
 from datetime import datetime
-from uuid import UUID
 from models import WeaponStatistic, SkinStatistic
+from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID
 
 
 def try_parse_int(val):
@@ -41,3 +44,12 @@ def create_skin(game_match, skin):
         skin=skin_uuid,
         usage_time=usage_time
     )
+
+
+def send_to_tg_channel(text):
+    url_req = "https://api.telegram.org/bot" + TELEGRAM_TOKEN + "/sendMessage" + "?chat_id=" + TELEGRAM_CHAT_ID + "&text=" + text
+    results = requests.get(url_req)
+    if results.status_code == 200:
+        if not results.json()['ok']:
+            print(results.json())
+

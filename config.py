@@ -13,6 +13,9 @@ with open("config/server.yaml") as file:
     SERVER_PORT = server_config["PORT"]
     SERVER_DEBUG = server_config["DEBUG"]
 
-
+with open("config/telegram.yaml") as file:
+    telegram_config = safe_load(file)
+    TELEGRAM_TOKEN = telegram_config["TOKEN"]
+    TELEGRAM_CHAT_ID = telegram_config["CHAT_ID"]
 
 

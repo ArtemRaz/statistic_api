@@ -1,5 +1,6 @@
 /config/db.yaml
 /config/server.yaml
+/config/telegram.yaml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
