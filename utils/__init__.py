@@ -21,6 +21,7 @@ def create_weapon(game_match, weapon):
     kills = weapon.get('kills')
     headshots = weapon.get('headshots')
     shots = weapon.get('shots')
+    hit_count = weapon.get('hit_count')
     reloads = weapon.get('reloads')
     usage_time = try_parse_datetime(weapon.get('usage_time'), "%M:%S")
 
@@ -30,6 +31,7 @@ def create_weapon(game_match, weapon):
         kills=kills,
         headshots=headshots,
         shots=shots,
+        hit_count=hit_count,
         reloads=reloads,
         usage_time=usage_time
     )

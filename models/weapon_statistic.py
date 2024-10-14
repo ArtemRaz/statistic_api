@@ -9,6 +9,7 @@ class WeaponStatistic(BaseModel):
     kills = IntegerField(null=True)
     headshots = IntegerField(null=True)
     shots = IntegerField(null=True)
+    hit_count = IntegerField(null=True)
     reloads = IntegerField(null=True)
     usage_time = TimeField(null=True)
 
